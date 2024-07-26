@@ -40,13 +40,16 @@ public class SlingShot : MonoBehaviour
 
     private void HandleInput()
     {
-        if (Input.GetMouseButtonDown(0) && _newBall == null)
+        if ((Input.GetMouseButtonDown(0) ||
+            Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+            && _newBall == null)
         {
             // Debug.Log("Spawn Ball");
             SpawnNewBall();
         }
 
-        if (Input.GetMouseButton(0) && _newBall != null)
+        if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+            && _newBall != null)
         {
             // Debug.Log("Dragging Ball");
             DragBall();
@@ -56,7 +59,9 @@ public class SlingShot : MonoBehaviour
             shootDirection = (spawnPoint.position - _newBall.position).normalized;
             forceAtRelease = shootDirection * forceValue;
         }
-        else if (Input.GetMouseButtonUp(0) && _newBall != null)
+        else if ((Input.GetMouseButtonUp(0) ||
+                (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended))
+                && _newBall != null)
         {
             // Debug.Log("Released Ball");
             ReleaseBall();
@@ -85,8 +90,21 @@ public class SlingShot : MonoBehaviour
 
     private void DragBall()
     {
-        // Convert the mouse position to world space
-        Vector3 mouseScreenPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamLocal.WorldToScreenPoint(_newBall.position).z);
+        Vector3 inputPosition;
+
+        if (Input.touchCount > 0)
+        {
+            // Use touch input position
+            inputPosition = Input.GetTouch(0).position;
+        }
+        else
+        {
+            // Use mouse input position
+            inputPosition = Input.mousePosition;
+        }
+
+        // Convert the input position to a Vector3
+        Vector3 mouseScreenPos = new Vector3(inputPosition.x, inputPosition.y, mainCamLocal.WorldToScreenPoint(_newBall.position).z);
         Vector3 mouseWorldPos = mainCamLocal.ScreenToWorldPoint(mouseScreenPos);
 
         // Define the range for dragging
