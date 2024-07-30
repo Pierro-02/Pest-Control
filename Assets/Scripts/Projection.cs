@@ -45,7 +45,7 @@ public class Projection : MonoBehaviour
         var ghostObj = Instantiate(ballPrefab, pos, Quaternion.identity);
         SceneManager.MoveGameObjectToScene(ghostObj.gameObject, _simulationScene);
 
-        Debug.Log("Velocity: " + velocity);
+        // Debug.Log("Velocity: " + velocity);
         Rigidbody rb = ghostObj.GetComponent<Rigidbody>();
         rb.isKinematic = false;
         rb.AddForce(velocity);

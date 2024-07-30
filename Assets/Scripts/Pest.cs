@@ -52,8 +52,8 @@ public class Pest : MonoBehaviour
             Vector3 move = direction * speed * Time.deltaTime;
             rb.MovePosition(rb.transform.position + move);
 
-            Debug.Log("Direction: " + direction);
-            Debug.Log("Position: " + rb.transform.position);
+            // Debug.Log("Direction: " + direction);
+            // Debug.Log("Position: " + rb.transform.position);
 
             yield return null; // Wait until the next frame
         }
